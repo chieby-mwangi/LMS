@@ -9,9 +9,9 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "MYO LMS DB",
-            "database": "myo lms db",
-            "username": "mwangi",
+            "name": "myo_lms_db",
+            "database": "myo_lms_db",
+            "username": "root",
             "askForPassword": true
         }
     ]
