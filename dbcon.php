@@ -2,7 +2,7 @@
 $host = 'localhost';
 $username = 'root';
 $password = '49324932';
-$database = 'myo lms db';
+$database = 'myo_lms_db';
 
 // Create connection
 $conn = mysqli_connect($host, $username, $password, $database);
