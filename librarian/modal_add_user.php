@@ -39,12 +39,33 @@
     </div>
 	
 	<?php
-	if (isset($_POST['submit'])){
-	$username=$_POST['username'];
-	$password=$_POST['password'];
-	$firstname=$_POST['firstname'];
-	$lastname=$_POST['lastname'];
-	
-	mysql_query("insert into users (username,password,firstname,lastname) values('$username','$password','$firstname','$lastname')")or die(mysql_error());
-	}
-	?>
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+
+    // Create connection
+    $connection = mysqli_connect('localhost', 'root', '', 'myo_lms_db');
+
+    // Check connection
+    if (!$connection) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Prepare and bind
+    $stmt = $connection->prepare("INSERT INTO users (username, password, firstname, lastname) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $username, $password, $firstname, $lastname);
+
+    // Execute the statement
+    if ($stmt->execute()) {
+        echo "New record created successfully";
+    } else {
+        die("Error: " . $stmt->error);
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    mysqli_close($connection);
+}
+?>

@@ -21,18 +21,33 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from borrow
-								LEFT JOIN member ON borrow.member_id = member.member_id
-								LEFT JOIN borrowdetails ON borrow.borrow_id = borrowdetails.borrow_id
-								LEFT JOIN book on borrowdetails.book_id =  book.book_id 
-								ORDER BY borrow.borrow_id DESC
-								  ")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['borrow_id'];
-									$book_id=$row['book_id'];
-									$borrow_details_id=$row['borrow_details_id'];
-				
-									?>
+                                <?php
+include('dbcon.php'); // Include your database connection details here
+
+// Query to retrieve data from multiple tables using mysqli
+$user_query = mysqli_query($mysqli, "SELECT * FROM borrow
+                                     LEFT JOIN member ON borrow.member_id = member.member_id
+                                     LEFT JOIN borrowdetails ON borrow.borrow_id = borrowdetails.borrow_id
+                                     LEFT JOIN book ON borrowdetails.book_id = book.book_id
+                                     ORDER BY borrow.borrow_id DESC") or die(mysqli_error($mysqli));
+
+while ($row = mysqli_fetch_array($user_query)) {
+    $borrow_id = $row['borrow_id'];
+    $book_id = $row['book_id'];
+    $borrow_details_id = $row['borrow_details_id'];
+
+    // Output or process each row of data as needed
+    echo "Borrow ID: " . $borrow_id . "<br>";
+    echo "Book ID: " . $book_id . "<br>";
+    echo "Borrow Details ID: " . $borrow_details_id . "<br>";
+
+    // You can access other columns as needed, e.g., $row['firstname'], $row['title'], etc.
+}
+
+// Close the database connection
+mysqli_close($mysqli);
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

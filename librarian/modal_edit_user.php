@@ -42,18 +42,39 @@
     </div>
 	
 	<?php
-	if (isset($_POST['edit'])){
-	
-	$user_id=$_POST['id'];
-	$username=$_POST['username'];
-	$password=$_POST['password'];
-	$firstname=$_POST['firstname'];
-	$lastname=$_POST['lastname'];
-	
-	mysql_query("update users set username='$username', password='$password' , firstname = '$firstname' , lastname = '$lastname'  where user_id='$user_id'")or die(mysql_error()); ?>
-	<script>
-	window.location="users.php";
-	</script>
-	<?php
-	}
-	?>
+if (isset($_POST['edit'])) {
+    $user_id = $_POST['id'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+
+    // Create connection
+    $connection = mysqli_connect('localhost', 'root', '', 'myo_lms_db');
+
+    // Check connection
+    if (!$connection) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Prepare and bind
+    $stmt = $connection->prepare("UPDATE users SET username = ?, password = ?, firstname = ?, lastname = ? WHERE user_id = ?");
+    $stmt->bind_param("ssssi", $username, $password, $firstname, $lastname, $user_id);
+
+    // Execute the statement
+    if ($stmt->execute()) {
+        echo "Record updated successfully";
+    } else {
+        die("Error: " . $stmt->error);
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    mysqli_close($connection);
+    ?>
+    <script>
+        window.location = "users.php";
+    </script>
+    <?php
+}
+?>

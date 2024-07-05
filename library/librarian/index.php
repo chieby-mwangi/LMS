@@ -31,23 +31,51 @@
 								</div>
 								
 								<?php
-								if (isset($_POST['submit'])){
-								session_start();
-								$username = $_POST['username'];
-								$password = $_POST['password'];
-								$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-								$result = mysql_query($query)or die(mysql_error());
-								$num_row = mysql_num_rows($result);
-									$row=mysql_fetch_array($result);
-									if( $num_row > 0 ) {
-										header('location:dashboard.php');
-								$_SESSION['id']=$row['user_id'];
-									}
-									else{ ?>
-								<div class="alert alert-danger">Access Denied</div>		
-								<?php
-								}}
-								?>
+if (isset($_POST['submit'])) {
+    session_start();
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Establish a database connection (replace with your actual database credentials)
+    $connection = mysqli_connect("localhost", "username", "password", "database_name");
+
+    // Check connection
+    if (mysqli_connect_errno()) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        exit();
+    }
+
+    // Escape user inputs for security
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
+
+    // Query to fetch user data
+    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($connection, $query);
+
+    // Check if query executed successfully
+    if ($result) {
+        $num_row = mysqli_num_rows($result);
+        if ($num_row > 0) {
+            // Authentication successful, redirect to dashboard
+            $row = mysqli_fetch_array($result);
+            $_SESSION['id'] = $row['user_id'];
+            header('Location: dashboard.php');
+            exit();
+        } else {
+            // Authentication failed, display error message
+            echo '<div class="alert alert-danger">Access Denied</div>';
+        }
+    } else {
+        // Query execution failed
+        echo "Error: " . mysqli_error($connection);
+    }
+
+    // Close the database connection
+    mysqli_close($connection);
+}
+?>
+
 						</form>
 				
 				</div>

@@ -26,26 +26,52 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from students where status = 'unactive' ")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['student_id'];  ?>
-									<tr class="del<?php echo $id ?>">
-                                    <td><?php echo $row['student_no']; ?></td> 
-                                    <td><?php echo $row['password']; ?></td>                                 
-                                    <td><?php echo $row['firstname']." ".$row['lastname']; ?></td>                                                                              
-                                    <td><?php echo $row['course']; ?> </td> 
-                                    <td><?php echo $row['gender']; ?></td> 
-                                    <td><?php echo $row['address']; ?></td> 
-                                    <td><?php echo $row['contact']; ?></td> 
-                                    <td width="60"><img src="<?php echo $row['photo']; ?>" width="60" height="60"></td> 
-									<?php include('toolttip_edit_delete.php'); ?>
-                                    <td width="150">
-											<a  href="#confirm<?php echo $id; ?>" data-toggle="modal" class="btn btn-success"><i class="icon-check"></i>&nbsp;Confirm Request</a>
-											<?php include('confirm_request.php') ?>
-                                    </td>
-									
-                                    </tr>
-									<?php  }  ?>
+                                <?php
+// Database connection
+try {
+    $pdo = new PDO('mysql:host=your_host;dbname=your_db', 'your_user', 'your_password');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Could not connect to the database: " . $e->getMessage());
+}
+
+// Query to select unactive students
+try {
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE status = :status");
+    $stmt->execute(['status' => 'unactive']);
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $id = htmlspecialchars($row['student_id']);
+        $student_no = htmlspecialchars($row['student_no']);
+        $password = htmlspecialchars($row['password']);
+        $name = htmlspecialchars($row['firstname']) . " " . htmlspecialchars($row['lastname']);
+        $course = htmlspecialchars($row['course']);
+        $gender = htmlspecialchars($row['gender']);
+        $address = htmlspecialchars($row['address']);
+        $contact = htmlspecialchars($row['contact']);
+        $photo = htmlspecialchars($row['photo']);
+        ?>
+        <tr class="del<?php echo $id ?>">
+            <td><?php echo $student_no; ?></td>
+            <td><?php echo $password; ?></td>
+            <td><?php echo $name; ?></td>
+            <td><?php echo $course; ?></td>
+            <td><?php echo $gender; ?></td>
+            <td><?php echo $address; ?></td>
+            <td><?php echo $contact; ?></td>
+            <td width="60"><img src="<?php echo $photo; ?>" width="60" height="60"></td>
+            <?php include('toolttip_edit_delete.php'); ?>
+            <td width="150">
+                <a href="#confirm<?php echo $id; ?>" data-toggle="modal" class="btn btn-success"><i class="icon-check"></i>&nbsp;Confirm Request</a>
+                <?php include('confirm_request.php'); ?>
+            </td>
+        </tr>
+        <?php
+    }
+} catch (PDOException $e) {
+    die("Error querying the database: " . $e->getMessage());
+}
+?>
+
                            
                                 </tbody>
                             </table>

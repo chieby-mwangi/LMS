@@ -1,9 +1,17 @@
 <?php
 include('dbcon.php');
 
-$id=$_GET['id'];
+$id = mysqli_real_escape_string($conn, $_GET['id']); // Sanitize input to prevent SQL injection
 
-mysql_query("delete from users where user_id='$id'") or die(mysql_error());
+$query = "DELETE FROM users WHERE user_id='$id'";
+$result = mysqli_query($conn, $query);
 
-header('location:users.php');
+if (!$result) {
+    die("Error: " . mysqli_error($conn)); // Handle error gracefully
+}
+
+mysqli_close($conn); // Close the MySQL connection
+
+header('location: users.php');
+exit(); // Ensure no further code execution after redirection
 ?>

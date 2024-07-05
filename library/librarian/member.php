@@ -25,10 +25,24 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from member")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['member_id'];  ?>
-									<tr class="del<?php echo $id ?>">
+								<?php
+// Assuming your MySQL connection is already established
+
+// Perform query
+$user_query = mysqli_query($connection, "SELECT * FROM member") or die(mysqli_error($connection));
+
+// Iterate over results
+while ($row = mysqli_fetch_array($user_query)) {
+    $id = $row['member_id'];
+    echo '<tr class="del' . $id . '">';
+    // Output other HTML or process data as needed
+    echo '</tr>';
+}
+
+// Close connection
+mysqli_close($connection);
+?>
+
 									
 									                              
                                     <td><?php echo $row['firstname']." ".$row['lastname']; ?></td>

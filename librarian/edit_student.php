@@ -6,11 +6,29 @@
 		<div class="margin-top">
 			<div class="row">	
 			<div class="span12">	
-		<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row=mysql_fetch_array($query);
-		
-		?>
+			<?php 
+include('dbcon.php');
+
+$get_id = mysqli_real_escape_string($conn, $_GET['get_id']); // Sanitize input to prevent SQL injection
+
+$query = mysqli_query($conn, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($conn));
+
+if (mysqli_num_rows($query) > 0) {
+    $row = mysqli_fetch_array($query);
+    // Example usage of fetched data
+    $member_id = $row['member_id'];
+    $firstname = $row['firstname'];
+    $lastname = $row['lastname'];
+} else {
+    // Handle case where no member with given ID is found
+    echo "No member found with ID: " . $get_id;
+}
+
+// Remember to close the mysqli_result object when you're done with it
+mysqli_free_result($query);
+mysqli_close($conn); // Close the MySQL connection
+?>
+
              <div class="alert alert-info"><i class="icon-pencil"></i>&nbsp;Edit Member</div>
 			<p><a class="btn btn-info" href="member.php"><i class="icon-arrow-left icon-large"></i>&nbsp;Back</a></p>
 	<div class="addstudent">
@@ -54,11 +72,30 @@
 			<select name="type" required>
 			
 			
-<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row1=mysql_fetch_array($query);
-		
-		?>					
+			<?php 
+include('dbcon.php');
+
+// Assuming $get_id is already defined and sanitized
+$get_id = mysqli_real_escape_string($conn, $_GET['get_id']); // Sanitize input to prevent SQL injection
+
+$query = mysqli_query($conn, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($conn));
+
+if (mysqli_num_rows($query) > 0) {
+    $row = mysqli_fetch_array($query);
+    // Example usage of fetched data
+    $member_id = $row['member_id'];
+    $firstname = $row['firstname'];
+    $lastname = $row['lastname'];
+} else {
+    // Handle case where no member with given ID is found
+    echo "No member found with ID: " . $get_id;
+}
+
+// Remember to close the mysqli_result object when you're done with it
+mysqli_free_result($query);
+mysqli_close($conn); // Close the MySQL connection
+?>
+
 									
 									<option> </option>
 									<option>Student</option>

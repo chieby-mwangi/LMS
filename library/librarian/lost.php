@@ -45,14 +45,43 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'lost'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+// Establish MySQLi connection (replace with your connection details)
+$mysqli = new mysqli('localhost', 'username', 'password', 'database_name');
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+// Query to select lost books
+$user_query = "SELECT * FROM book WHERE status = 'lost'";
+$result = $mysqli->query($user_query);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $id = $row['book_id'];
+        $cat_id = $row['category_id'];
+
+        // Query to fetch category information
+        $cat_query = "SELECT * FROM category WHERE category_id = '$cat_id'";
+        $cat_result = $mysqli->query($cat_query);
+        $cat_row = $cat_result->fetch_assoc();
+
+        // Display book and category information
+        echo "Book ID: " . $id . "<br>";
+        echo "Book Category: " . $cat_row['category_name'] . "<br>";
+        // Add more fields as needed
+        echo "<hr>";
+    }
+} else {
+    echo "No lost books found.";
+}
+
+// Close connection
+$mysqli->close();
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

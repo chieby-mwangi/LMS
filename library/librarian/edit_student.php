@@ -6,11 +6,40 @@
 		<div class="margin-top">
 			<div class="row">	
 			<div class="span12">	
-		<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row=mysql_fetch_array($query);
-		
-		?>
+			<?php
+// Assuming $get_id is already defined or retrieved from somewhere else securely
+
+// Establish a database connection (replace with your actual database credentials)
+$connection = mysqli_connect("localhost", "username", "password", "database_name");
+
+// Check connection
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+// Escape $get_id to prevent SQL injection
+$get_id = mysqli_real_escape_string($connection, $get_id);
+
+// Query to fetch data
+$query = mysqli_query($connection, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($connection));
+
+// Fetch the row as an associative array
+if ($row = mysqli_fetch_array($query)) {
+    // Process the retrieved data
+    // Example usage:
+    echo "Member ID: " . $row['member_id'] . "<br>";
+    echo "Name: " . $row['name'] . "<br>";
+    echo "Email: " . $row['email'] . "<br>";
+    // Add more fields as needed
+} else {
+    echo "No member found with ID: " . $get_id;
+}
+
+// Close the database connection
+mysqli_close($connection);
+?>
+
              <div class="alert alert-info"><i class="icon-pencil"></i>&nbsp;Edit Member</div>
 			<p><a class="btn btn-info" href="member.php"><i class="icon-arrow-left icon-large"></i>&nbsp;Back</a></p>
 	<div class="addstudent">
@@ -54,11 +83,40 @@
 			<select name="type" required>
 			
 			
-<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row1=mysql_fetch_array($query);
+<<?php
+// Assuming $get_id is already defined or retrieved from somewhere else securely
+
+// Establish a database connection (replace with your actual database credentials)
+$connection = mysqli_connect("localhost", "username", "password", "database_name");
+
+// Check connection
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+// Escape $get_id to prevent SQL injection
+$get_id = mysqli_real_escape_string($connection, $get_id);
+
+// Query to fetch data
+$query = mysqli_query($connection, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($connection));
+
+// Fetch the row as an associative array
+if ($row1 = mysqli_fetch_array($query)) {
+    // Process the retrieved data
+    // Example usage:
+    echo "Member ID: " . $row1['member_id'] . "<br>";
+    echo "Name: " . $row1['name'] . "<br>";
+    echo "Email: " . $row1['email'] . "<br>";
+    // Add more fields as needed
+} else {
+    echo "No member found with ID: " . $get_id;
+}
+
+// Close the database connection
+mysqli_close($connection);
+?>
 		
-		?>					
 									
 									<option> </option>
 									<option>Student</option>
@@ -73,11 +131,40 @@
 			<div class="controls">
 				<select name="year_level" required>
 					
-	<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row1=mysql_fetch_array($query);
-		
-		?>					
+				<?php
+// Assuming $get_id is already defined or retrieved from somewhere else securely
+
+// Establish a database connection (replace with your actual database credentials)
+$connection = mysqli_connect("localhost", "username", "password", "database_name");
+
+// Check connection
+if (mysqli_connect_errno()) {
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
+}
+
+// Escape $get_id to prevent SQL injection
+$get_id = mysqli_real_escape_string($connection, $get_id);
+
+// Query to fetch data
+$query = mysqli_query($connection, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($connection));
+
+// Fetch the row as an associative array
+if ($row1 = mysqli_fetch_array($query)) {
+    // Process the retrieved data
+    // Example usage:
+    echo "Member ID: " . $row1['member_id'] . "<br>";
+    echo "Name: " . $row1['name'] . "<br>";
+    echo "Email: " . $row1['email'] . "<br>";
+    // Add more fields as needed
+} else {
+    echo "No member found with ID: " . $get_id;
+}
+
+// Close the database connection
+mysqli_close($connection);
+?>
+			
 								
 									<option> </option>
 									<option>First Year</option>

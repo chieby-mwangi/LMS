@@ -45,14 +45,42 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'old'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+// Database credentials
+$hostname = 'hostname';
+$username = 'username';
+$password = 'password';
+$database = 'database_name';
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Establish a connection to the database using mysqli
+$connection = new mysqli($hostname, $username, $password, $database);
+
+// Check connection
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
+}
+
+// Query to select books with status 'old'
+$user_query = $connection->query("SELECT * FROM book WHERE status = 'old'");
+
+while ($row = $user_query->fetch_assoc()) {
+    $id = $row['book_id'];
+    $cat_id = $row['category_id'];
+
+    // Query to select the category details for each book
+    $cat_query = $connection->query("SELECT * FROM category WHERE category_id = '$cat_id'");
+    $cat_row = $cat_query->fetch_assoc();
+
+    // Output or process your data here
+    echo "Book ID: " . $id . "<br>";
+    echo "Category ID: " . $cat_id . "<br>";
+    echo "Category Name: " . $cat_row['category_name'] . "<br>";
+}
+
+// Close the connection
+$connection->close();
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

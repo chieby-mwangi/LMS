@@ -6,11 +6,23 @@
 		<div class="margin-top">
 			<div class="row">	
 			<div class="span12">	
-		<?php 
-		$query=mysql_query("select * from book LEFT JOIN category on category.category_id  = book.category_id where book_id='$get_id'")or die(mysql_error());
-		$row=mysql_fetch_array($query);
-		$category_id = $row['category_id'];
-		?>
+			<?php 
+include('dbcon.php');
+
+$get_id = mysqli_real_escape_string($conn, $_GET['get_id']); // Sanitize input to prevent SQL injection
+
+$query = mysqli_query($conn, "SELECT * FROM book 
+                              LEFT JOIN category ON category.category_id = book.category_id 
+                              WHERE book_id='$get_id'") or die(mysqli_error($conn));
+
+$row = mysqli_fetch_array($query);
+$category_id = $row['category_id'];
+
+// Remember to close the mysqli_result object when you're done with it
+mysqli_free_result($query);
+mysqli_close($conn); // Close the MySQL connection
+?>
+
              <div class="alert alert-danger"><i class="icon-pencil"></i>&nbsp;Edit Books</div>
 			<p><a class="btn-default" href="books.php"><i class="icon-arrow-left icon-large"></i>&nbsp;Back</a></p>
 	<div class="addstudent">
@@ -29,9 +41,27 @@
 			<div class="controls">
 			<select name="category_id">
 				<option value="<?php echo $category_id; ?>"><?php echo $row['classname']; ?></option>
-				<?php $query1 = mysql_query("select * from category where category_id != '$category_id'")or die(mysql_error());
-				while($row1 = mysql_fetch_array($query1)){
-				?>
+				<?php 
+include('dbcon.php');
+
+// Assuming $category_id is already defined and sanitized
+$query1 = mysqli_query($conn, "SELECT * FROM category WHERE category_id != '$category_id'") or die(mysqli_error($conn));
+
+while ($row1 = mysqli_fetch_array($query1)) {
+    // Your logic here for processing each row
+    // For example:
+    $category_name = $row1['category_name'];
+    ?>
+    <!-- Example output within HTML -->
+    <option value="<?php echo $row1['category_id']; ?>"><?php echo $category_name; ?></option>
+    <?php
+}
+
+// Remember to close the mysqli_result object when you're done with it
+mysqli_free_result($query1);
+mysqli_close($conn); // Close the MySQL connection
+?>
+
 				<option value="<?php echo $row1['category_id']; ?>"><?php echo $row1['classname']; ?></option>
 				<?php } ?>
 			</select>

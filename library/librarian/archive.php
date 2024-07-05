@@ -34,14 +34,32 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'Archive'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+// Assuming you have already established a MySQL connection
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Query to retrieve archived books
+$user_query = mysql_query("SELECT * FROM book WHERE status = 'Archive'") or die(mysql_error());
+
+while ($row = mysql_fetch_array($user_query)) {
+    $id = $row['book_id'];  
+    $cat_id = $row['category_id'];
+
+    // Query to fetch category details for the current book
+    $cat_query = mysql_query("SELECT * FROM category WHERE category_id = '$cat_id'") or die(mysql_error());
+    $cat_row = mysql_fetch_array($cat_query);
+
+    // Output or process the retrieved data
+    echo "Book ID: " . $id . "<br>";
+    echo "Book Title: " . $row['book_title'] . "<br>";
+    echo "Author: " . $row['author'] . "<br>";
+    echo "Category: " . $cat_row['classname'] . "<br>";
+    echo "<hr>";
+}
+
+// Close MySQL connection after use (if not using PDO)
+mysql_close($connection);
+?>
+
 									<tr class="del<?php echo $id ?>">
                                     <td><?php echo $row['book_id']; ?></td>
                                     <td><?php echo $row['book_title']; ?></td>

@@ -28,9 +28,23 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from member")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['member_id'];  ?>
+								<?php
+include('dbcon.php');
+
+$user_query = $conn->query("SELECT * FROM member") or die($conn->error);
+while ($row = $user_query->fetch_assoc()) {
+    $id = $row['member_id'];
+    // Continue processing each row as needed
+?>
+    <!-- Example of displaying data -->
+    <p>Member ID: <?php echo $row['member_id']; ?></p>
+    <p>First Name: <?php echo $row['firstname']; ?></p>
+    <p>Last Name: <?php echo $row['lastname']; ?></p>
+    <!-- Add other fields as needed -->
+<?php
+}
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

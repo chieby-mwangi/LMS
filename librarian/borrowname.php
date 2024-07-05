@@ -5,10 +5,18 @@
 				<div class="controls">
 				<select name="member_id" class="chzn-select" required/>
 				<option></option>
-				<?php $result =  mysql_query("select * from member")or die(mysql_error()); 
-				while ($row=mysql_fetch_array($result)){ ?>
-				<option value="<?php echo $row['member_id']; ?>"><?php echo $row['firstname']." ".$row['lastname']; ?></option>
-				<?php } ?>
+				<?php
+include('dbcon.php');
+
+$result = mysqli_query($conn, "SELECT * FROM member") or die(mysqli_error($conn));
+
+while ($row = mysqli_fetch_array($result)) {
+    ?>
+    <option value="<?php echo $row['member_id']; ?>"><?php echo $row['firstname'] . " " . $row['lastname']; ?></option>
+    <?php
+}
+?>
+
 				</select>
 				</div>
 			</div>

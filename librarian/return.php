@@ -23,18 +23,40 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from borrow
-								LEFT JOIN member ON borrow.member_id = member.member_id
-								LEFT JOIN borrowdetails ON borrow.borrow_id = borrowdetails.borrow_id
-								LEFT JOIN book on borrowdetails.book_id =  book.book_id 
-								where borrowdetails.borrow_status = 'returned'ORDER BY borrow.borrow_id DESC
-								  ")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['borrow_id'];
-									$book_id=$row['book_id'];
-									$borrow_details_id=$row['borrow_details_id'];
-				
-									?>
+                                <?php
+// Database connection
+$mysqli = new mysqli("host", "username", "password", "database");
+
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+// Query
+$query = "SELECT * FROM borrow
+          LEFT JOIN member ON borrow.member_id = member.member_id
+          LEFT JOIN borrowdetails ON borrow.borrow_id = borrowdetails.borrow_id
+          LEFT JOIN book ON borrowdetails.book_id = book.book_id 
+          WHERE borrowdetails.borrow_status = 'returned'
+          ORDER BY borrow.borrow_id DESC";
+
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $id = $row['borrow_id'];
+        $book_id = $row['book_id'];
+        $borrow_details_id = $row['borrow_details_id'];
+        
+        // Your code to handle the result set
+    }
+    $result->free(); // Free result set
+} else {
+    die("Query failed: " . $mysqli->error);
+}
+
+// Close connection
+$mysqli->close();
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

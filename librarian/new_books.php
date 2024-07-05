@@ -45,14 +45,36 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'new'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+// Create connection
+$connection = mysqli_connect('localhost', 'root', '', 'myo_lms_db');
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Check connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Execute the first query
+$user_query = mysqli_query($connection, "SELECT * FROM book WHERE status = 'new'") or die(mysqli_error($connection));
+
+// Loop through the results
+while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
+    $id = $row['book_id'];
+    $cat_id = $row['category_id'];
+
+    // Prepare and execute the second query
+    $cat_query = mysqli_query($connection, "SELECT * FROM category WHERE category_id = '$cat_id'") or die(mysqli_error($connection));
+    $cat_row = mysqli_fetch_array($cat_query, MYSQLI_ASSOC);
+    ?>
+    <!-- You can continue your HTML/PHP output here -->
+    <option value="<?php echo $cat_row['category_id']; ?>"><?php echo $cat_row['classname']; ?></option>
+    <?php
+}
+
+// Close the connection when done
+mysqli_close($connection);
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              
@@ -77,7 +99,12 @@
                                     </td>
 									
                                     </tr>
-									<?php  }  ?>
+									<?php
+									}
+									
+									?>
+
+								
                            
                                 </tbody>
                             </table>

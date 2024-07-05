@@ -19,10 +19,37 @@
 				<div class="controls">
 				<select name="member_id" class="chzn-select"required/>
 				<option></option>
-				<?php $result =  mysql_query("select * from member")or die(mysql_error()); 
-				while ($row=mysql_fetch_array($result)){ ?>
-				<option value="<?php echo $row['member_id']; ?>"><?php echo $row['firstname']." ".$row['lastname']; ?></option>
-				<?php } ?>
+				<?php
+// Assuming you have established a MySQLi connection
+$mysqli = new mysqli("localhost", "username", "password", "database");
+
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+// Query to select data from the member table
+$result = $mysqli->query("SELECT * FROM member");
+
+// Check if the query was successful
+if (!$result) {
+    die("Error in SQL query: " . $mysqli->error);
+}
+
+// Loop through the result set and generate <option> elements
+while ($row = $result->fetch_assoc()) {
+    $member_id = $row['member_id'];
+    $fullname = $row['firstname'] . " " . $row['lastname'];
+    echo "<option value='$member_id'>$fullname</option>";
+}
+
+// Free result set
+$result->free();
+
+// Close MySQLi connection
+$mysqli->close();
+?>
+
 				</select>
 				</div>
 			</div>

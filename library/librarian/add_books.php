@@ -28,11 +28,15 @@
 			<select name="category_id">
 			<option></option>
 			<?php
-			$cat_query = mysql_query("select * from category");
-			while($cat_row = mysql_fetch_array($cat_query)){
-			?>
-			<option value="<?php echo $cat_row['category_id']; ?>"><?php echo $cat_row['classname']; ?></option>
-			<?php  } ?>
+// Assuming you have already established a MySQLi connection
+$cat_query = mysqli_query($conn, "SELECT * FROM category");
+while ($cat_row = mysqli_fetch_array($cat_query)) {
+    ?>
+    <option value="<?php echo $cat_row['category_id']; ?>"><?php echo $cat_row['classname']; ?></option>
+    <?php
+}
+?>
+
 			</select>
 		</div>
 		</div>

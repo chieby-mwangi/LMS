@@ -52,27 +52,45 @@ $author = $_POST['author'];
                                 </thead>
                                 <tbody>
 								 
-                                  <?php 
+								<?php
+// Assuming $title and $author are properly sanitized or validated before use
+$title = isset($_GET['title']) ? $_GET['title'] : '';
+$author = isset($_GET['author']) ? $_GET['author'] : '';
 
-				
-								  $user_query=mysql_query("select * from book where status != 'Archive' and book_title LIKE  '%$title%'
-								  OR status != 'Archive' and author LIKE '%$author%'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
-									$book_copies = $row['book_copies'];
-									
-									$borrow_details = mysql_query("select * from borrowdetails where book_id = '$id' and borrow_status = 'pending'");
-									$row11 = mysql_fetch_array($borrow_details);
-									$count = mysql_num_rows($borrow_details);
-									
-									$total =  $book_copies  -  $count; 
-									/* $t4otal =  $book_copies  - $borrow_details;
-									
-									echo $total; */
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Assuming you have already established a MySQL connection using mysqli or PDO
+
+// Query to retrieve books
+$user_query = mysql_query("SELECT * FROM book WHERE status != 'Archive' AND (book_title LIKE '%$title%' OR author LIKE '%$author%')") or die(mysql_error());
+
+while ($row = mysql_fetch_array($user_query)) {
+    $id = $row['book_id'];
+    $cat_id = $row['category_id'];
+    $book_copies = $row['book_copies'];
+    
+    // Query to count pending borrow details
+    $borrow_details = mysql_query("SELECT * FROM borrowdetails WHERE book_id = '$id' AND borrow_status = 'pending'");
+    $count = mysql_num_rows($borrow_details);
+    
+    // Calculate available book copies
+    $available_copies = $book_copies - $count;
+    
+    // Fetch category details
+    $cat_query = mysql_query("SELECT * FROM category WHERE category_id = '$cat_id'") or die(mysql_error());
+    $cat_row = mysql_fetch_array($cat_query);
+    
+    // Example output (you can adjust as needed)
+    echo "Book ID: " . $id . "<br>";
+    echo "Book Title: " . $row['book_title'] . "<br>";
+    echo "Author: " . $row['author'] . "<br>";
+    echo "Available Copies: " . $available_copies . "<br>";
+    echo "Category: " . $cat_row['classname'] . "<br>";
+    echo "<hr>";
+}
+
+// Close MySQL connection after use (if not using PDO)
+mysql_close($connection);
+?>
+
 									<tr class="del<?php echo $id ?>">
                                     <td><?php echo $row['book_id']; ?></td>
                                     <td><?php echo $row['book_title']; ?></td>

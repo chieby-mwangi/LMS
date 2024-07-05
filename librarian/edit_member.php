@@ -6,11 +6,25 @@
 		<div class="margin-top">
 			<div class="row">	
 			<div class="span12">	
-		<?php 
-		$query=mysql_query("select * from member where member_id='$get_id'")or die(mysql_error());
-		$row=mysql_fetch_array($query);
-		
-		?>
+			<?php 
+include('dbcon.php');
+
+$get_id = mysqli_real_escape_string($conn, $_GET['get_id']); // Sanitize input to prevent SQL injection
+
+$query = mysqli_query($conn, "SELECT * FROM member WHERE member_id='$get_id'") or die(mysqli_error($conn));
+
+$row = mysqli_fetch_array($query);
+
+// Example usage of fetched data
+$member_id = $row['member_id'];
+$firstname = $row['firstname'];
+$lastname = $row['lastname'];
+
+// Remember to close the mysqli_result object when you're done with it
+mysqli_free_result($query);
+mysqli_close($conn); // Close the MySQL connection
+?>
+
              <div class="alert alert-danger"><i class="icon-pencil"></i>&nbsp;Edit Member</div>
 			<p><a class="btn-default" href="member.php"><i class="icon-arrow-left icon-large"></i>&nbsp;Back</a></p>
 	<div class="addstudent">

@@ -45,14 +45,36 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'Subject for Replacement'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+try {
+    // Database connection
+    $pdo = new PDO('mysql:host=your_host;dbname=your_dbname', 'your_username', 'your_password');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+    // Prepare and execute the query for books
+    $stmt = $pdo->prepare("SELECT * FROM book WHERE status = :status");
+    $stmt->execute(['status' => 'Subject for Replacement']);
+    $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($books as $book) {
+        $id = $book['book_id'];
+        $cat_id = $book['category_id'];
+
+        // Prepare and execute the query for category
+        $cat_stmt = $pdo->prepare("SELECT * FROM category WHERE category_id = :category_id");
+        $cat_stmt->execute(['category_id' => $cat_id]);
+        $category = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Your code to process and display the data
+        // For example:
+        echo 'Book ID: ' . $id . '<br>';
+        echo 'Category: ' . $category['category_name'] . '<br>';
+    }
+} catch (PDOException $e) {
+    echo 'Error: ' . $e->getMessage();
+}
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

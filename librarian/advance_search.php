@@ -52,27 +52,29 @@ $author = $_POST['author'];
                                 </thead>
                                 <tbody>
 								 
-                                  <?php 
+								<?php
+										include('dbcon.php'); // Ensure this is included for the database connection
 
-				
-								  $user_query=mysql_query("select * from book where status != 'Archive' and book_title LIKE  '%$title%'
-								  OR status != 'Archive' and author LIKE '%$author%'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
-									$book_copies = $row['book_copies'];
-									
-									$borrow_details = mysql_query("select * from borrowdetails where book_id = '$id' and borrow_status = 'pending'");
-									$row11 = mysql_fetch_array($borrow_details);
-									$count = mysql_num_rows($borrow_details);
-									
-									$total =  $book_copies  -  $count; 
-									/* $t4otal =  $book_copies  - $borrow_details;
-									
-									echo $total; */
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+										$title = mysqli_real_escape_string($conn, $title); // Sanitize input to prevent SQL injection
+										$author = mysqli_real_escape_string($conn, $author); // Sanitize input to prevent SQL injection
+
+										$user_query = mysqli_query($conn, "SELECT * FROM book WHERE status != 'Archive' AND book_title LIKE '%$title%' OR status != 'Archive' AND author LIKE '%$author%'") or die(mysqli_error($conn));
+
+										while($row = mysqli_fetch_array($user_query)){
+											$id = $row['book_id'];  
+											$cat_id = $row['category_id'];
+											$book_copies = $row['book_copies'];
+
+											$borrow_details = mysqli_query($conn, "SELECT * FROM borrowdetails WHERE book_id = '$id' AND borrow_status = 'pending'");
+											$row11 = mysqli_fetch_array($borrow_details);
+											$count = mysqli_num_rows($borrow_details);
+
+											$total = $book_copies - $count;
+
+											$cat_query = mysqli_query($conn, "SELECT * FROM category WHERE category_id = '$cat_id'") or die(mysqli_error($conn));
+											$cat_row = mysqli_fetch_array($cat_query);
+?>
+
 									<tr class="del<?php echo $id ?>">
                                     <td><?php echo $row['book_id']; ?></td>
                                     <td><?php echo $row['book_title']; ?></td>

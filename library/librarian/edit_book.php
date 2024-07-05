@@ -28,10 +28,16 @@
 			<label class="control-label" for="inputPassword">Category:</label>
 			<div class="controls">
 			<select name="category_id">
-				<option value="<?php echo $category_id; ?>"><?php echo $row['classname']; ?></option>
-				<?php $query1 = mysql_query("select * from category where category_id != '$category_id'")or die(mysql_error());
-				while($row1 = mysql_fetch_array($query1)){
-				?>
+				<option value="<select name="category">
+    <option value="<?php echo $category_id; ?>"><?php echo $row['classname']; ?></option>
+    <?php
+    $query1 = mysqli_query($connection, "SELECT * FROM category WHERE category_id != '$category_id'") or die(mysqli_error($connection));
+    while ($row1 = mysqli_fetch_array($query1)) {
+        ?>
+        <option value="<?php echo $row1['category_id']; ?>"><?php echo $row1['classname']; ?></option>
+    <?php } ?>
+</select>
+
 				<option value="<?php echo $row1['category_id']; ?>"><?php echo $row1['classname']; ?></option>
 				<?php } ?>
 			</select>

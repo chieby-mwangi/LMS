@@ -28,11 +28,31 @@
 			<select name="category_id">
 			<option></option>
 			<?php
-			$cat_query = mysql_query("select * from category");
-			while($cat_row = mysql_fetch_array($cat_query)){
-			?>
-			<option value="<?php echo $cat_row['category_id']; ?>"><?php echo $cat_row['classname']; ?></option>
-			<?php  } ?>
+// Create connection
+$connection = mysqli_connect('localhost', 'root', '', 'myo_lms_db');
+
+// Check connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Execute query
+$cat_query = mysqli_query($connection, "SELECT * FROM category");
+if (!$cat_query) {
+    die("Query failed: " . mysqli_error($connection));
+}
+
+// Fetch and display results
+while ($cat_row = mysqli_fetch_array($cat_query, MYSQLI_ASSOC)) {
+    ?>
+    <option value="<?php echo $cat_row['category_id']; ?>"><?php echo $cat_row['classname']; ?></option>
+    <?php
+}
+
+// Close the connection when done
+mysqli_close($connection);
+?>
+
 			</select>
 		</div>
 		</div>

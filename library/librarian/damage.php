@@ -45,14 +45,39 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'Damage'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+// Assuming you have already connected to your MySQL database using mysqli
+// Replace with your actual database connection code
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+// Example connection:
+// $mysqli = new mysqli("localhost", "username", "password", "database");
+
+$user_query = $mysqli->query("SELECT * FROM book WHERE status = 'Damage'") or die($mysqli->error);
+
+while ($row = $user_query->fetch_assoc()) {
+    $id = $row['book_id'];  
+    $cat_id = $row['category_id'];
+
+    // Query to fetch category data
+    $cat_query = $mysqli->query("SELECT * FROM category WHERE category_id = '$cat_id'") or die($mysqli->error);
+    $cat_row = $cat_query->fetch_assoc();
+
+    // Process or display data
+    // For example:
+    echo 'Book ID: ' . htmlspecialchars($id) . '<br>';
+    echo 'Category: ' . htmlspecialchars($cat_row['category_name']) . '<br>';
+
+    // Free the result set
+    $cat_query->free();
+}
+
+// Free the result set
+$user_query->free();
+
+// Close connection
+$mysqli->close();
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              

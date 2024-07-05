@@ -5,10 +5,22 @@
 				<div class="controls">
 				<select name="member_id" class="chzn-select" required/>
 				<option></option>
-				<?php $result =  mysql_query("select * from member")or die(mysql_error()); 
-				while ($row=mysql_fetch_array($result)){ ?>
-				<option value="<?php echo $row['member_id']; ?>"><?php echo $row['firstname']." ".$row['lastname']; ?></option>
-				<?php } ?>
+				<?php
+// Assuming you have already connected to your MySQL database
+// Replace with your actual database connection code
+
+// Example connection:
+// $mysqli = new mysqli("localhost", "username", "password", "database");
+
+$result = $mysqli->query("SELECT * FROM member") or die($mysqli->error);
+
+while ($row = $result->fetch_assoc()) {
+    echo '<option value="' . htmlspecialchars($row['member_id']) . '">' . htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) . '</option>';
+}
+
+$result->free();
+?>
+
 				</select>
 				</div>
 			</div>

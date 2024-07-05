@@ -45,14 +45,29 @@
                                 </thead>
                                 <tbody>
 								 
-                                  <?php  $user_query=mysql_query("select * from book where status = 'lost'")or die(mysql_error());
-									while($row=mysql_fetch_array($user_query)){
-									$id=$row['book_id'];  
-									$cat_id=$row['category_id'];
+								<?php
+include('dbcon.php'); // Assuming dbcon.php contains mysqli connection setup
 
-											$cat_query = mysql_query("select * from category where category_id = '$cat_id'")or die(mysql_error());
-											$cat_row = mysql_fetch_array($cat_query);
-									?>
+$user_query = mysqli_query($conn, "SELECT * FROM book WHERE status = 'lost'") or die(mysqli_error($conn));
+
+while ($row = mysqli_fetch_array($user_query)) {
+    $id = $row['book_id'];
+    $cat_id = $row['category_id'];
+
+    $cat_query = mysqli_query($conn, "SELECT * FROM category WHERE category_id = '$cat_id'") or die(mysqli_error($conn));
+    $cat_row = mysqli_fetch_array($cat_query);
+
+    // Your processing logic here
+?>
+    <!-- Example usage: Output category information -->
+    <p>Book ID: <?php echo $id; ?></p>
+    <p>Category Name: <?php echo $cat_row['category_name']; ?></p>
+<?php
+}
+
+mysqli_close($conn); // Close the MySQL connection
+?>
+
 									<tr class="del<?php echo $id ?>">
 									
 									                              
